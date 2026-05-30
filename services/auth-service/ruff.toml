@@ -1,0 +1,9 @@
+line-length = 100
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[lint.flake8-bugbear]
+# FastAPI dependency-injection idiom: Depends/Security/etc. in arg defaults.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Security", "fastapi.Query"]
