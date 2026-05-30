@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RAG System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: {} } };
+    </script>
+  </head>
+  <body class="bg-slate-100 text-slate-800 min-h-screen">
+    <div class="max-w-3xl mx-auto p-6">
+      <header class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">RAG System</h1>
+        <div id="user-bar" class="hidden items-center gap-3">
+          <span id="user-email" class="text-sm text-slate-500"></span>
+          <button id="logout-btn" class="text-sm text-red-600 hover:underline">Logout</button>
+        </div>
+      </header>
+
+      <!-- Auth -->
+      <section id="auth-view" class="bg-white rounded-xl shadow p-6 max-w-md mx-auto">
+        <div class="flex gap-4 mb-4 border-b">
+          <button data-auth-tab="login" class="auth-tab pb-2 font-medium border-b-2 border-blue-600">Login</button>
+          <button data-auth-tab="register" class="auth-tab pb-2 font-medium text-slate-400">Register</button>
+        </div>
+        <form id="auth-form" class="space-y-3">
+          <input id="auth-email" type="email" required placeholder="Email"
+                 class="w-full border rounded-lg px-3 py-2" />
+          <input id="auth-password" type="password" required minlength="8" placeholder="Password (min 8 chars)"
+                 class="w-full border rounded-lg px-3 py-2" />
+          <button type="submit" class="w-full bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-700">
+            <span id="auth-submit-label">Login</span>
+          </button>
+          <p id="auth-error" class="text-sm text-red-600 hidden"></p>
+        </form>
+      </section>
+
+      <!-- App -->
+      <section id="app-view" class="hidden">
+        <nav class="flex gap-2 mb-4">
+          <button data-tab="upload" class="tab px-4 py-2 rounded-lg bg-blue-600 text-white">Upload</button>
+          <button data-tab="chat" class="tab px-4 py-2 rounded-lg bg-white">Chat</button>
+          <button data-tab="history" class="tab px-4 py-2 rounded-lg bg-white">History</button>
+        </nav>
+
+        <!-- Upload -->
+        <div id="upload-tab" class="tab-panel bg-white rounded-xl shadow p-6">
+          <div id="dropzone"
+               class="border-2 border-dashed border-slate-300 rounded-xl p-10 text-center cursor-pointer hover:border-blue-400">
+            <p class="text-slate-500">Drag &amp; drop a file here, or click to choose</p>
+            <input id="file-input" type="file" class="hidden" />
+          </div>
+          <div id="upload-results" class="mt-4 space-y-3"></div>
+        </div>
+
+        <!-- Chat -->
+        <div id="chat-tab" class="tab-panel hidden bg-white rounded-xl shadow p-6">
+          <div id="messages" class="space-y-3 mb-4 max-h-96 overflow-y-auto"></div>
+          <form id="chat-form" class="flex gap-2">
+            <input id="chat-input" required placeholder="Ask a question…"
+                   class="flex-1 border rounded-lg px-3 py-2" />
+            <button type="submit" class="bg-blue-600 text-white rounded-lg px-4 hover:bg-blue-700">Send</button>
+          </form>
+        </div>
+
+        <!-- History -->
+        <div id="history-tab" class="tab-panel hidden bg-white rounded-xl shadow p-6">
+          <button id="history-refresh" class="mb-4 text-sm text-blue-600 hover:underline">Refresh</button>
+          <div id="history-list" class="space-y-3"></div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
