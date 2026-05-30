@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: embedding-config
+  namespace: rag-prod
+data:
+  EMBED_AWS_REGION: ${AWS_REGION}
+  EMBED_SQS_QUEUE_URL: ${SQS_QUEUE_URL}
+  EMBED_MODEL_NAME: "BAAI/bge-large-en-v1.5"
+  EMBED_EMBED_DIM: "1024"

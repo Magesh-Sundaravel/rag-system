@@ -1,0 +1,11 @@
+# AWS EBS gp3 for the Postgres PVC. Requires the EBS CSI driver on the cluster.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gp3
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+parameters:
+  type: gp3
+  fsType: ext4
