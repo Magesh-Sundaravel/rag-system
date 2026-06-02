@@ -11,6 +11,7 @@ from slowapi.util import get_remote_address
 from src import proxy
 from src.config import settings
 from src.security import require_jwt
+from src.telemetry import init_telemetry
 
 limiter = Limiter(key_func=get_remote_address, default_limits=[settings.rate_limit])
 
@@ -25,6 +26,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="api-gateway", lifespan=lifespan)
+
+if init_telemetry(app, service_name="api-gateway"):
+    # Trace upstream service calls made via the proxy's httpx client.
+    from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
+
+    HTTPXClientInstrumentor().instrument()
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

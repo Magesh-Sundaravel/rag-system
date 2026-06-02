@@ -11,6 +11,11 @@ dependencies = [
     "psycopg[binary]>=3.2",
     "pgvector>=0.3",
     "pydantic-settings>=2.6",
+    "opentelemetry-sdk>=1.29",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.29",
+    "opentelemetry-instrumentation-fastapi>=0.50b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.50b0",
+    "opentelemetry-instrumentation-botocore>=0.50b0",
 ]
 
 # Heavy ML stack (torch + model). Installed in the container, skipped for local dev/tests.

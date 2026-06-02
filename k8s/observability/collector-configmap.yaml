@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+  namespace: rag-monitoring
+data:
+  config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+    processors:
+      memory_limiter:
+        check_interval: 5s
+        limit_percentage: 80
+        spike_limit_percentage: 25
+      batch:
+        timeout: 5s
+
+    exporters:
+      # Traces -> Tempo (OTLP). Host must match your Tempo Helm release.
+      otlp/tempo:
+        endpoint: tempo.rag-monitoring.svc.cluster.local:4317
+        tls:
+          insecure: true
+      # Metrics -> Prometheus remote-write (run Prometheus with
+      # --web.enable-remote-write-receiver). Host must match your Helm release.
+      prometheusremotewrite:
+        endpoint: http://prometheus.rag-monitoring.svc.cluster.local:9090/api/v1/write
+      # Logs -> Loki native OTLP ingest endpoint.
+      otlphttp/loki:
+        endpoint: http://loki.rag-monitoring.svc.cluster.local:3100/otlp
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [otlp/tempo]
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [prometheusremotewrite]
+        logs:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [otlphttp/loki]

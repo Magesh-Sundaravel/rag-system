@@ -12,6 +12,7 @@ from src.jobs import IngestJob
 from src.pipelines import ocr, text
 from src.queue import enqueue_chunks
 from src.storage import upload_raw
+from src.telemetry import init_telemetry
 
 logger = logging.getLogger("ingestion")
 
@@ -23,6 +24,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="ingestion-service", lifespan=lifespan)
+
+if init_telemetry(app, service_name="ingestion-service", engine=engine):
+    # Trace boto3 S3/SQS calls.
+    from opentelemetry.instrumentation.botocore import BotocoreInstrumentor
+
+    BotocoreInstrumentor().instrument()
 
 
 @app.get("/health")
