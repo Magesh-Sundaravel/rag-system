@@ -1,9 +1,9 @@
 from datetime import UTC, datetime
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import DateTime, String, Text
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.config import settings
@@ -15,8 +15,8 @@ class DocumentChunk(Base):
 
     __tablename__ = "document_chunks"
 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    document_id: Mapped[str] = mapped_column(String(36), index=True, nullable=False)
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    document_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), index=True, nullable=False)
     chunk_text: Mapped[str] = mapped_column(Text, nullable=False)
     chunk_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(Vector(settings.embed_dim))
@@ -31,7 +31,7 @@ class ChatHistory(Base):
 
     __tablename__ = "chat_history"
 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     session_id: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
     query: Mapped[str] = mapped_column(Text, nullable=False)
     answer: Mapped[str] = mapped_column(Text, nullable=False)

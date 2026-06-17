@@ -5,6 +5,8 @@ from starlette.background import BackgroundTask
 
 # Set in the app lifespan (or by tests). Module-level so it can be swapped in tests.
 client: httpx.AsyncClient | None = None
+# Separate client for SSE: no read timeout so long LLM streams don't get cut off.
+stream_client: httpx.AsyncClient | None = None
 
 _HOP_BY_HOP = {
     "host",
@@ -40,14 +42,14 @@ async def forward(request: Request, target: str) -> Response:
 async def stream(request: Request, target: str) -> StreamingResponse:
     """Streaming proxy for SSE (/query). Passes bytes through as they arrive."""
     body = await request.body()
-    req = client.build_request(
+    req = stream_client.build_request(
         request.method,
         target,
         headers=_downstream_headers(request),
         params=dict(request.query_params),
         content=body,
     )
-    resp = await client.send(req, stream=True)
+    resp = await stream_client.send(req, stream=True)
     return StreamingResponse(
         resp.aiter_raw(),
         status_code=resp.status_code,

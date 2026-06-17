@@ -1,4 +1,5 @@
 import hashlib
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -25,7 +26,7 @@ class ChunkRepository:
     def insert(
         self,
         *,
-        document_id: str,
+        document_id: UUID,
         chunk_text: str,
         chunk_hash: str,
         embedding: list[float],

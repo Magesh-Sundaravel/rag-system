@@ -29,9 +29,6 @@ def stream_answer(query: str, contexts: list[str]) -> Iterator[str]:
         messages=build_messages(query, contexts),
         temperature=0,
         stream=True,
-        # Required so the final streamed chunk carries token usage, which the
-        # OpenLLMetry Groq instrumentor records on the span.
-        stream_options={"include_usage": True},
     )
     for chunk in stream:
         # The final usage-only chunk (from include_usage) has no choices.
