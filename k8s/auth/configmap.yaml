@@ -7,3 +7,5 @@ data:
   AUTH_JWT_ALGORITHM: "HS256"
   AUTH_ACCESS_TOKEN_TTL_MINUTES: "15"
   AUTH_REFRESH_TOKEN_TTL_DAYS: "7"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.rag-monitoring.svc.cluster.local:4317"
+  OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"

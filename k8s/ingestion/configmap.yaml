@@ -7,3 +7,5 @@ data:
   INGEST_AWS_REGION: ${AWS_REGION}
   INGEST_S3_BUCKET: ${S3_BUCKET}
   INGEST_SQS_QUEUE_URL: ${SQS_QUEUE_URL}
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.rag-monitoring.svc.cluster.local:4317"
+  OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"

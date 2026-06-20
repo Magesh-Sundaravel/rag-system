@@ -11,6 +11,11 @@ dependencies = [
     "pgvector>=0.3",
     "groq>=0.13",
     "pydantic-settings>=2.6",
+    "opentelemetry-sdk>=1.29",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.29",
+    "opentelemetry-instrumentation-fastapi>=0.50b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.50b0",
+    "opentelemetry-instrumentation-groq>=0.34",
 ]
 
 # Shared embedder (must match embedding-service): bge-large via torch. Container-only.

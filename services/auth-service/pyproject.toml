@@ -13,6 +13,10 @@ dependencies = [
     "python-jose[cryptography]>=3.3",
     "pydantic-settings>=2.6",
     "email-validator>=2.2",
+    "opentelemetry-sdk>=1.29",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.29",
+    "opentelemetry-instrumentation-fastapi>=0.50b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.50b0",
 ]
 
 [dependency-groups]

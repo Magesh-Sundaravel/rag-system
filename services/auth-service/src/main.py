@@ -10,6 +10,7 @@ from src import security
 from src.db import Base, engine, get_db
 from src.models import RevokedToken, User
 from src.schemas import LoginRequest, RefreshRequest, RegisterRequest, TokenPair, UserOut
+from src.telemetry import init_telemetry
 
 
 @asynccontextmanager
@@ -19,6 +20,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="auth-service", lifespan=lifespan)
+init_telemetry(app, service_name="auth-service", engine=engine)
 
 
 @app.get("/health")

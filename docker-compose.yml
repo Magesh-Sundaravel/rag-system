@@ -27,5 +27,15 @@ services:
     ports:
       - "4566:4566"
 
+  # All-in-one local telemetry backend: OTLP Collector + Prometheus + Tempo +
+  # Loki + Grafana. Point services at OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317.
+  # Grafana UI: http://localhost:3000 (anonymous access, no login).
+  otel-lgtm:
+    image: grafana/otel-lgtm:0.8.1
+    ports:
+      - "3000:3000"   # Grafana
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+
 volumes:
   pgdata:

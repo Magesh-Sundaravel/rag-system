@@ -10,3 +10,5 @@ data:
   GATEWAY_RATE_LIMIT: "100/minute"
   # JSON array (pydantic-settings parses list fields as JSON).
   GATEWAY_CORS_ORIGINS: '["https://${PUBLIC_HOST}"]'
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.rag-monitoring.svc.cluster.local:4317"
+  OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"

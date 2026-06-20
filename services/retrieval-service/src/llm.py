@@ -31,6 +31,9 @@ def stream_answer(query: str, contexts: list[str]) -> Iterator[str]:
         stream=True,
     )
     for chunk in stream:
+        # The final usage-only chunk (from include_usage) has no choices.
+        if not chunk.choices:
+            continue
         delta = chunk.choices[0].delta.content
         if delta:
             yield delta

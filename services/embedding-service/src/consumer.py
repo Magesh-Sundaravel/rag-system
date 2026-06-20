@@ -1,6 +1,7 @@
 import json
 import logging
 from collections.abc import Callable
+from uuid import UUID
 
 import boto3
 
@@ -26,7 +27,7 @@ def handle_message(body: dict, repo: ChunkRepository, embed_fn: EmbedFn) -> str:
 
     vector = embed_fn([chunk_text])[0]
     repo.insert(
-        document_id=body["document_id"],
+        document_id=UUID(body["document_id"]),
         chunk_text=chunk_text,
         chunk_hash=chunk_hash,
         embedding=vector,

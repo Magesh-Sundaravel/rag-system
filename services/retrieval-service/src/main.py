@@ -1,4 +1,5 @@
 import json
+from contextlib import asynccontextmanager
 from uuid import uuid4
 
 from fastapi import Depends, FastAPI
@@ -9,11 +10,26 @@ from sqlalchemy.orm import Session
 
 from src import llm, retriever
 from src.config import settings
-from src.db import get_db
+from src.db import engine, get_db
 from src.embedder import embed
 from src.models import ChatHistory
+from src.telemetry import init_telemetry
 
-app = FastAPI(title="retrieval-service")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Pre-warm the embedding model so the first /query request doesn't time out.
+    embed(["warmup"])
+    yield
+
+
+app = FastAPI(title="retrieval-service", lifespan=lifespan)
+
+if init_telemetry(app, service_name="retrieval-service", engine=engine):
+    # OpenLLMetry: one span per Groq call with model, token usage and latency.
+    from opentelemetry.instrumentation.groq import GroqInstrumentor
+
+    GroqInstrumentor().instrument()
 
 
 class QueryRequest(BaseModel):
